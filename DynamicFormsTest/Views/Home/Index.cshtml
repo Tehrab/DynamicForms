@@ -1,0 +1,33 @@
+﻿@using DynamicFormsTest.Controllers
+@model List<PCardData>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_LayoutMain.cshtml";
+}
+
+<h2>Index</h2>
+@using (Html.BeginForm())
+{
+    for (int i = 0; i < Model.Count; i++)
+    {
+        //this code block iterates over the Model, which is a List<PCardData>,
+        //and creates the input for each object in the list. It also creates
+        //an input for the first child object in the Accounts property. You'll
+        //have to view the final output to make sense of how MVC generates and
+        //names the input forms from the List<PCardData> object
+        <div id="editRow">
+            <span>Card Num:</span> @Html.TextBoxFor(m => m[i].CardNum)
+            <span>Amount:</span> @Html.TextBoxFor(m => m[i].Amount)
+            <span>Account:</span> @Html.TextBoxFor(m => m[i].Accounts[0].Account)
+        </div>
+    }
+    //this manually written input is to simulate a javascript-created input
+    //that respects the naming convention expected by the MVC model binding system
+    <input name="[2].Accounts[1].Account" type="text" value="test2">
+    
+    //submitting this form will post back to the Index() action where you can see the
+    //MVC model binding has added a second child object to the third (index 2) PCardData
+    //object
+    <input type="submit" value="Submit" />
+}
